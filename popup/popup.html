@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>trackR Monitor</title>
+  <link rel="stylesheet" href="popup.css" />
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="header">
+    <div class="logo">
+      <div class="logo-icon">t</div>
+      <span class="logo-text">track<span class="accent">R</span></span>
+    </div>
+    <div id="connection-badge" class="badge badge--disconnected">
+      <span class="dot"></span>
+      <span id="connection-label">Not connected</span>
+    </div>
+  </header>
+
+  <!-- Not connected state -->
+  <section id="section-disconnected" class="section">
+    <div class="empty-state">
+      <div class="empty-icon">🔌</div>
+      <p class="empty-title">Extension not linked</p>
+      <p class="empty-sub">Open the trackR web app and log in as an employee to connect automatically.</p>
+      <a id="btn-open-app" class="btn btn--primary" href="#" target="_blank">
+        Open trackR ↗
+      </a>
+    </div>
+  </section>
+
+  <!-- Connected / idle state -->
+  <section id="section-idle" class="section hidden">
+    <div class="employee-row">
+      <div class="avatar" id="avatar-initials">JM</div>
+      <div>
+        <div class="employee-name" id="employee-name">James Mitchell</div>
+        <div class="employee-sub">Not clocked in</div>
+      </div>
+    </div>
+    <button id="btn-clock-in" class="btn btn--primary btn--full">
+      ▶ Clock In
+    </button>
+  </section>
+
+  <!-- Active session state -->
+  <section id="section-active" class="section hidden">
+    <!-- Timer -->
+    <div class="timer-block">
+      <div class="timer-label">Active Session</div>
+      <div class="timer" id="timer">00:00:00</div>
+    </div>
+
+    <!-- Current activity -->
+    <div class="activity-card" id="current-activity-card">
+      <div class="activity-header">
+        <span class="activity-category-dot" id="activity-dot"></span>
+        <span class="activity-category" id="activity-category">—</span>
+      </div>
+      <div class="activity-title" id="activity-title">—</div>
+      <div class="activity-domain" id="activity-domain">—</div>
+    </div>
+
+    <!-- Today summary -->
+    <div class="summary-block">
+      <div class="summary-heading">Today</div>
+      <div id="summary-rows" class="summary-rows">
+        <!-- injected by popup.js -->
+      </div>
+    </div>
+
+    <button id="btn-clock-out" class="btn btn--danger btn--full">
+      ■ Clock Out
+    </button>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <a id="footer-link" href="#" target="_blank" class="footer-link">
+      Open Dashboard ↗
+    </a>
+    <span id="sync-label" class="sync-label">—</span>
+  </footer>
+
+  <script src="popup.js"></script>
+</body>
+</html>

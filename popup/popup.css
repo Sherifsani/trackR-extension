@@ -1,0 +1,388 @@
+/* ─── Reset & base ─────────────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg:          #0c0c0f;
+  --surface:     #141418;
+  --surface-2:   #1c1c22;
+  --border:      #242429;
+  --text:        #f0f0f5;
+  --text-2:      #7a7a8a;
+  --text-3:      #3d3d4a;
+  --amber:       #f59e0b;
+  --amber-dim:   rgba(245, 158, 11, 0.12);
+  --amber-text:  #fbbf24;
+  --emerald:     #10b981;
+  --emerald-dim: rgba(16, 185, 129, 0.12);
+  --red:         #ef4444;
+  --red-dim:     rgba(239, 68, 68, 0.1);
+  --radius:      10px;
+  --radius-sm:   6px;
+}
+
+body {
+  width: 320px;
+  background: var(--bg);
+  color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-size: 13px;
+  line-height: 1.4;
+  -webkit-font-smoothing: antialiased;
+}
+
+.hidden { display: none !important; }
+
+/* ─── Header ───────────────────────────────────────────────────────────────── */
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 14px 10px;
+  border-bottom: 1px solid var(--border);
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.logo-icon {
+  width: 22px;
+  height: 22px;
+  background: var(--amber);
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'SF Mono', 'Fira Code', monospace;
+  font-size: 12px;
+  font-weight: 700;
+  color: #000;
+}
+
+.logo-text {
+  font-family: 'SF Mono', 'Fira Code', monospace;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text);
+  letter-spacing: -0.5px;
+}
+
+.accent { color: var(--amber); }
+
+/* ─── Badges ───────────────────────────────────────────────────────────────── */
+.badge {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 8px;
+  border-radius: 20px;
+  font-size: 10px;
+  font-weight: 500;
+  border: 1px solid transparent;
+}
+
+.badge--connected {
+  background: var(--emerald-dim);
+  border-color: rgba(16, 185, 129, 0.25);
+  color: var(--emerald);
+}
+
+.badge--disconnected {
+  background: var(--surface-2);
+  border-color: var(--border);
+  color: var(--text-2);
+}
+
+.badge--active {
+  background: var(--amber-dim);
+  border-color: rgba(245, 158, 11, 0.25);
+  color: var(--amber-text);
+}
+
+.dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+.badge--connected .dot,
+.badge--active .dot {
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.4; }
+}
+
+/* ─── Sections ─────────────────────────────────────────────────────────────── */
+.section {
+  padding: 14px;
+}
+
+/* ─── Empty / disconnected state ───────────────────────────────────────────── */
+.empty-state {
+  text-align: center;
+  padding: 12px 8px 6px;
+}
+
+.empty-icon {
+  font-size: 28px;
+  margin-bottom: 10px;
+}
+
+.empty-title {
+  color: var(--text);
+  font-weight: 600;
+  font-size: 13px;
+  margin-bottom: 6px;
+}
+
+.empty-sub {
+  color: var(--text-2);
+  font-size: 11.5px;
+  line-height: 1.6;
+  margin-bottom: 14px;
+}
+
+/* ─── Employee row ─────────────────────────────────────────────────────────── */
+.employee-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.avatar {
+  width: 34px;
+  height: 34px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'SF Mono', monospace;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text-2);
+  flex-shrink: 0;
+}
+
+.employee-name {
+  font-weight: 600;
+  font-size: 13px;
+  color: var(--text);
+}
+
+.employee-sub {
+  font-size: 11px;
+  color: var(--text-2);
+  margin-top: 1px;
+}
+
+/* ─── Timer ────────────────────────────────────────────────────────────────── */
+.timer-block {
+  text-align: center;
+  padding: 14px 0 16px;
+}
+
+.timer-label {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: var(--text-3);
+  margin-bottom: 6px;
+  font-family: 'SF Mono', monospace;
+}
+
+.timer {
+  font-family: 'SF Mono', 'Fira Code', monospace;
+  font-size: 36px;
+  font-weight: 700;
+  color: var(--amber);
+  letter-spacing: -1px;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ─── Current activity card ────────────────────────────────────────────────── */
+.activity-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 10px 12px;
+  margin-bottom: 12px;
+}
+
+.activity-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 4px;
+}
+
+.activity-category-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--text-3);
+  flex-shrink: 0;
+}
+
+.activity-category {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text-2);
+  font-weight: 500;
+}
+
+.activity-title {
+  font-size: 12.5px;
+  font-weight: 500;
+  color: var(--text);
+  margin-bottom: 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.activity-domain {
+  font-size: 11px;
+  color: var(--text-2);
+  font-family: 'SF Mono', monospace;
+}
+
+/* ─── Category dot colors ───────────────────────────────────────────────────── */
+.cat-development { background: #7c3aed; }
+.cat-design      { background: #db2777; }
+.cat-meetings    { background: #059669; }
+.cat-comms       { background: #2563eb; }
+.cat-docs        { background: #0284c7; }
+.cat-pm          { background: #d97706; }
+.cat-research    { background: #0891b2; }
+.cat-off_task    { background: #dc2626; }
+.cat-other       { background: #4b5563; }
+
+/* ─── Today summary ─────────────────────────────────────────────────────────── */
+.summary-block {
+  margin-bottom: 12px;
+}
+
+.summary-heading {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: var(--text-3);
+  font-weight: 500;
+  margin-bottom: 8px;
+}
+
+.summary-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.summary-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.summary-label {
+  font-size: 11.5px;
+  color: var(--text-2);
+  width: 80px;
+  flex-shrink: 0;
+  text-transform: capitalize;
+}
+
+.summary-bar-track {
+  flex: 1;
+  height: 4px;
+  background: var(--surface-2);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.summary-bar-fill {
+  height: 100%;
+  border-radius: 2px;
+  transition: width 0.4s ease;
+}
+
+.summary-time {
+  font-family: 'SF Mono', monospace;
+  font-size: 10.5px;
+  color: var(--text-2);
+  width: 38px;
+  text-align: right;
+  flex-shrink: 0;
+}
+
+/* ─── Buttons ───────────────────────────────────────────────────────────────── */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 8px 14px;
+  border-radius: var(--radius-sm);
+  font-size: 12.5px;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+  transition: opacity 0.15s, transform 0.1s;
+}
+
+.btn:hover   { opacity: 0.88; }
+.btn:active  { transform: scale(0.97); }
+
+.btn--primary {
+  background: var(--amber);
+  color: #000;
+}
+
+.btn--danger {
+  background: transparent;
+  color: var(--text-2);
+  border: 1px solid var(--border);
+}
+
+.btn--danger:hover {
+  background: var(--red-dim);
+  border-color: rgba(239, 68, 68, 0.3);
+  color: var(--red);
+  opacity: 1;
+}
+
+.btn--full { width: 100%; }
+
+/* ─── Footer ────────────────────────────────────────────────────────────────── */
+.footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 9px 14px;
+  border-top: 1px solid var(--border);
+}
+
+.footer-link {
+  font-size: 11px;
+  color: var(--text-2);
+  text-decoration: none;
+  transition: color 0.15s;
+}
+
+.footer-link:hover { color: var(--amber); }
+
+.sync-label {
+  font-size: 10px;
+  color: var(--text-3);
+  font-family: 'SF Mono', monospace;
+}

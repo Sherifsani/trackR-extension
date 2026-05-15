@@ -1,0 +1,55 @@
+{
+  "manifest_version": 3,
+  "name": "trackR Monitor",
+  "version": "1.0.0",
+  "description": "Workplace activity tracking for trackR",
+
+  "permissions": [
+    "tabs",
+    "idle",
+    "storage",
+    "alarms"
+  ],
+
+  "host_permissions": [
+    "http://localhost:3001/*",
+    "http://localhost:3000/*"
+  ],
+
+  "background": {
+    "service_worker": "background.js"
+  },
+
+  "content_scripts": [
+    {
+      "matches": ["http://localhost:3001/*", "http://localhost:3000/*"],
+      "js": ["content/auth.js"],
+      "run_at": "document_idle"
+    },
+    {
+      "matches": ["https://meet.google.com/*"],
+      "js": ["content/meet.js"],
+      "run_at": "document_idle"
+    },
+    {
+      "matches": ["https://github.com/*"],
+      "js": ["content/github.js"],
+      "run_at": "document_idle"
+    }
+  ],
+
+  "action": {
+    "default_popup": "popup/popup.html",
+    "default_icon": {
+      "16":  "icons/icon16.png",
+      "48":  "icons/icon48.png",
+      "128": "icons/icon128.png"
+    }
+  },
+
+  "icons": {
+    "16":  "icons/icon16.png",
+    "48":  "icons/icon48.png",
+    "128": "icons/icon128.png"
+  }
+}
