@@ -13,7 +13,9 @@
 
   "host_permissions": [
     "http://localhost:3001/*",
-    "http://localhost:3000/*"
+    "http://localhost:3000/*",
+    "https://*.ngrok-free.dev/*",
+    "https://*.ngrok.io/*"
   ],
 
   "background": {
@@ -22,7 +24,12 @@
 
   "content_scripts": [
     {
-      "matches": ["http://localhost:3001/*", "http://localhost:3000/*"],
+      "matches": [
+        "http://localhost:3001/*",
+        "http://localhost:3000/*",
+        "https://*.ngrok-free.dev/*",
+        "https://*.ngrok.io/*"
+      ],
       "js": ["content/auth.js"],
       "run_at": "document_idle"
     },

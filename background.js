@@ -275,6 +275,8 @@ chrome.tabs.onActivated.addListener(async ({ tabId }) => {
     const tab = await chrome.tabs.get(tabId);
     await startTrackingTab(tab);
   } catch (_) {}
+  // If the content script didn't relay clock-in, discover it on tab switch
+  if (!state.clockedIn && state.token) syncSessionState();
 });
 
 chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
@@ -397,10 +399,62 @@ function scheduleCheckpoint() {
   }, CHECKPOINT_INTERVAL_SEC * 1000);
 }
 
+// ─── Session state poll ───────────────────────────────────────────────────────
+// Discovers clock-in/out that happened in the web app when the content script
+// wasn't injected (e.g. the app is served via a tunnel like ngrok).
+
+async function syncSessionState() {
+  if (!state.token || !state.employeeId) return;
+
+  try {
+    const res = await fetch(
+      `${TRACKR_ORIGIN}/api/sessions/active?employeeId=${encodeURIComponent(state.employeeId)}`,
+      { headers: { Authorization: `Bearer ${state.token}` } }
+    );
+    if (!res.ok) return;
+    const data = await res.json();
+
+    if (data.session) {
+      const wasClocked = state.clockedIn;
+      state.clockedIn = true;
+      state.sessionId  = data.session.id;
+
+      await chrome.storage.local.set({ clockedIn: true, sessionId: data.session.id });
+
+      if (!wasClocked) {
+        // Session was started from the web app — start tracking from now
+        state.currentTabStart = Date.now();
+        ensureTodaySummary();
+        const [tab] = await chrome.tabs.query({ active: true, currentWindow: true }).catch(() => []);
+        if (tab) await startTrackingTab(tab);
+        scheduleCheckpoint();
+        console.log("[trackR] Session discovered via poll:", data.session.id);
+      }
+    } else {
+      if (state.clockedIn) {
+        // Session ended in the web app while content script wasn't relaying it
+        recordCurrentTab();
+        if (checkpointTimer) { clearTimeout(checkpointTimer); checkpointTimer = null; }
+        await syncToBackend({ noRetry: true });
+        state.clockedIn  = false;
+        state.sessionId  = null;
+        state.currentTabStart = null;
+        await chrome.storage.local.set({ clockedIn: false, sessionId: null });
+        console.log("[trackR] Session ended (detected via poll)");
+      }
+    }
+  } catch (err) {
+    console.warn("[trackR] syncSessionState failed:", err.message);
+  }
+}
+
 // ─── Periodic sync ────────────────────────────────────────────────────────────
 
 chrome.alarms.onAlarm.addListener((alarm) => {
-  if (alarm.name === "sync") syncToBackend();
+  if (alarm.name === "sync") {
+    syncToBackend();
+    syncSessionState();
+  }
 });
 
 // Eager sync — called right after a tab visit is recorded so the dashboard
@@ -802,6 +856,9 @@ async function init() {
 
   // Restart checkpoint timer if we restored a clocked-in session from storage
   if (state.clockedIn) scheduleCheckpoint();
+
+  // Sync session state from server on startup (catches sessions started via web app)
+  if (state.token && state.employeeId) syncSessionState();
 
   console.log("[trackR] ✓ Background service worker initialized");
 }
