@@ -3,6 +3,9 @@
 // and the background service worker (chrome.runtime.sendMessage).
 
 (function () {
+  // Mark extension as present via DOM attribute — synchronous, no event-timing race.
+  document.documentElement.setAttribute('data-trackr-ext', '1')
+
   // ── Page → Background ──────────────────────────────────────────────────────
 
   function sendToken() {
